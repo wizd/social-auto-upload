@@ -59,7 +59,7 @@ class DouYinVideo(object):
         self.publish_date = publish_date
         self.account_file = account_file
         self.date_format = '%Y年%m月%d日 %H:%M'
-        self.local_executable_path = ""  # change me
+        self.local_executable_path = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"  # change me
 
     async def set_schedule_time_douyin(self, page, publish_date):
         # 选择包含特定文本内容的 label 元素

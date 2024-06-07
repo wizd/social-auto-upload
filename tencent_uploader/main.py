@@ -83,7 +83,7 @@ class TencentVideo(object):
         self.publish_date = publish_date
         self.account_file = account_file
         self.category = category
-        self.local_executable_path = ""  # change me necessary！
+        self.local_executable_path = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"  # change me necessary！
 
     async def set_schedule_time_tencent(self, page, publish_date):
         print("click schedule")
