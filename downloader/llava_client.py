@@ -18,6 +18,7 @@ def llava_inference(question, image_path):
 
     if response.status_code == 200:
         result = response.json()
+        print(result['response'])
         return result['response']
     else:
         raise Exception(f"请求失败，状态码：{response.status_code}")
