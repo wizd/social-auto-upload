@@ -1,6 +1,7 @@
 import asyncio
 from pathlib import Path
-
+import sys
+sys.path.append(sys.path[0] + '/..')
 from conf import BASE_DIR
 from tencent_uploader.main import weixin_setup
 
