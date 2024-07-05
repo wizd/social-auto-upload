@@ -16,6 +16,11 @@ social-auto-upload This project aims to automate the posting of videos to variou
 - 部分国外社交媒体：
   - [x] tiktok
   - [ ] youtube
+
+---
+- [ ] 易用版本(支持非开发人员使用)：Gui or Cli
+- [ ] API 封装
+  - [ ] Docker 部署
 - [ ] 自动化上传(schedule)
 - [x] 定时上传(cron)
 - [ ] cookie 管理
@@ -29,6 +34,7 @@ social-auto-upload This project aims to automate the posting of videos to variou
 pip install -r requirements.txt
 playwright install chromium firefox
 ```
+非程序员，[新手级教程](https://juejin.cn/post/7372114027840208911)
 
 # 🐇 About
 The project for my own project extracted, my release strategy is timed release (released a day in advance), so the release part of the event are used for the next day time!
@@ -59,9 +65,56 @@ meta_file 内容(content)：
 这位勇敢的男子为了心爱之人每天坚守 🥺❤️‍🩹
 #坚持不懈 #爱情执着 #奋斗使者 #短视频
 ```
+
+### Usage
+1. 设置conf 文件中的 `LOCAL_CHROME_PATH`(在douyin、视频号 tiktok可能出现chromium 不兼容的各种问题，建议设置本地的chrome)
+2. 这里分割出来3条路
+   - 可自行研究源码，免费、任意 穿插在自己的项目中
+   - 可参考下面的各个平台的使用指南，`examples`文件夹中有各种示例代码
+   - 使用cli 简易使用(支持tiktok douyin 视频号)
+
+#### cli 用法
+```python 
+python cli_main.py <platform> <account_name> <action: upload, login> [options]
+```
+查看详细的参数说明使用：
+```python
+python cli_main.py -h
+```
+```python
+usage: cli_main.py [-h] platform account_name action ...
+
+Upload video to multiple social-media.
+
+positional arguments:
+  platform      Choose social-media platform: douyin tencent tiktok
+  account_name  Account name for the platform: xiaoA
+  action        Choose action
+    upload      upload operation
+    login       login operation
+    watch       watch operation
+
+options:
+  -h, --help    show this help message and exit
+
+```
+示例
+```python
+python cli_main.py douyin test login
+douyin平台，账号名为test，动作为login
+
+python cli_main.py douyin test upload "C:\Users\duperdog\Videos\2023-11-07_05-27-44 - 这位少女如梦中仙... .mp4" -pt 0
+douyin平台, 账号名为test, 动作为upload, 视频文件（需对应的meta文件，详见上）, 发布方式（pt）：0 立即发布
+
+python cli_main.py douyin test upload "C:\Users\superdog\Videos\2023-11-07_05-27-44 - 这位少女如梦中仙... .mp4" -pt 1 -t "2024-6-14 12:00"
+douyin平台, 账号名为test, 动作为upload, 视频文件, 发布方式（pt）：1 定时发布, 发布时间(t)： 2024-6-14 12:00
+```
+
 ---
 
-### 2. 抖音
+## 各平台详细说明
+
+### 1. 抖音
 <img src="media/show/pdf3.gif" alt="douyin show" width="500"/>
 
 使用playwright模拟浏览器行为
@@ -88,7 +141,7 @@ generate_schedule_time_next_day 默认从第二天开始（此举为避免选择
 > 解决方案：
 > 1. 下载chrome
 > 2. 找到chrome的安装目录
-> 3. 将目录配置到DouYinVideo类中  self.local_executable_path = "xxx/xxx/chrome.exe"
+> 3. 将本地chrome 路径conf文件中 LOCAL_CHROME_PATH = "xxx/xxx/chrome.exe"
 
 
 参考项目：
@@ -98,7 +151,7 @@ generate_schedule_time_next_day 默认从第二天开始（此举为避免选择
 
 ---
 
-### 3. 视频号
+### 2. 视频号
 使用playwright模拟浏览器行为
 1. 准备视频目录结构
 2. cookie获取：get_tencent_cookie.py 扫码登录
@@ -115,12 +168,12 @@ generate_schedule_time_next_day 默认从第二天开始（此举为避免选择
 > 解决方案：
 > 1. 下载chrome
 > 2. 找到chrome的安装目录
-> 3. 将目录配置到TencentVideo类中  self.local_executable_path = "xxx/xxx/chrome.exe"
+> 3. 将本地chrome 路径conf文件中 LOCAL_CHROME_PATH = "xxx/xxx/chrome.exe"
 
 ---
 
 
-### 4. 小红书
+### 3. 小红书
 该实现，借助ReaJason的[xhs](https://github.com/ReaJason/xhs)，再次感谢。
 
 1. 目录结构同上
@@ -143,7 +196,7 @@ xhs签名方式分为两种：
 故如果你有多账号分发，建议采用自建签名服务（todo 上传docker配置）
 ```
 ##### 疑难杂症
-遇到签名问题，可尝试更新cdn.jsdelivr.net_gh_requireCool_stealth.min.js_stealth.min.js文件
+遇到签名问题，可尝试更新 "utils/stealth.min.js"文件
 https://github.com/requireCool/stealth.min.js
 
 24.4.10 大多数人小红书失败的原因在于你的cookie有问题，请参照你cookie是不是如我这样
@@ -160,7 +213,7 @@ https://github.com/requireCool/stealth.min.js
 
 ---
 
-### 5. bilibili
+### 4. bilibili
 该实现，借助biliup的[biliup-rs](https://github.com/biliup/biliup-rs)，再次感谢。
 1. 准备视频目录结构
 2. cookie获取：`biliup.exe -u account.json login` 选项你喜欢的登录方式
@@ -178,14 +231,19 @@ bilibili cookie 长期有效（至少我运行2年以来是这样的）
 
 ---
 
-### 6. tiktok 
+### 5. tiktok 
 使用playwright模拟浏览器行为(Simulating Browser Behavior with playwright)
 1. 准备视频目录结构(Prepare the video directory structure)
-2. cookie获取(generate your cookie)：get_tk_cookie.py 
+2. 将本地chrome路径配置到conf文件中  LOCAL_CHROME_PATH = "xxx/xxx/chrome.exe"(Configure the local chrome path to the conf file)
+3. cookie获取(generate your cookie)：get_tk_cookie.py 
 ![get tiktok cookie](media/tk_login.png) 
-3. 上传视频(upload video)：upload_video_to_tiktok.py
+4. 上传视频(upload video)：upload_video_to_tiktok.py
 
-
+24.7.3 update local chrome support:
+- you can upload your custom thumbnail(place `png` file at the path of `videos`)
+- if not, the system will take the first frame of the video as the thumbnail.
+- chrome drive can't login by gmail oauth. the google don't support it. (if you want login by google oauth you can use the `tk_uploader/main.py` old firefox.)
+- before the upload process change the language to eng.
 
 其他部分解释：
 ```
@@ -225,7 +283,18 @@ Parameter explanation:
 ## 🐾Communicate
 [Donate as u like](https://www.buymeacoffee.com/hysn2001m)
 
-探讨自动化上传、自动制作视频
+如果你也是`一个人`，喜欢`折腾`， 想要在如此恶劣的大环境寻找突破
+
+希望探索 #技术变现 #AI创业 #跨境航海 #自动化上传 #自动化视频 #技术探讨 
+
+可以来群里和大家交流
+
 |![Nas](media/mp.jpg)|![赞赏](media/QR.png)|
 |:-:|:-:|
 |后台回复 `上传` 加群交流|如果你觉得有用|
+
+
+## Star History
+> 如果这个项目对你有帮助，⭐以表示支持 
+
+[![Star History Chart](https://api.star-history.com/svg?repos=dreammis/social-auto-upload&type=Date)](https://star-history.com/#dreammis/social-auto-upload&Date)

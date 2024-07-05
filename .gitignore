@@ -167,5 +167,6 @@ youtube_uploader/*.json
 douyin_uploader/*.json
 bilibili_uploader/*.json
 tk_uploader/*.json
+cookies
 
 videos/
