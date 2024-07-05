@@ -3,6 +3,9 @@ import os
 from pathlib import Path
 from datetime import datetime, timedelta
 
+import sys
+sys.path.append(sys.path[0] + '/..')
+
 from conf import BASE_DIR
 from douyin_uploader.main import douyin_setup, DouYinVideo
 from utils.files_times import generate_schedule_time_next_day, get_title_and_hashtags
