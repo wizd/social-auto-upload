@@ -97,7 +97,7 @@ class DouYinVideo(object):
         print('[+]正在上传-------{}.mp4'.format(self.title))
         # 等待页面跳转到指定的 URL，没进入，则自动等待到超时
         print('[-] 正在打开主页...')
-        await page.wait_for_url("https://creator.douyin.com/creator-micro/content/upload")
+        await page.wait_for_url("https://creator.douyin.com/creator-micro/content/upload", timeout=90000)
         # 点击 "上传视频" 按钮
         await page.locator(".upload-btn--9eZLd").set_input_files(self.file_path)
 

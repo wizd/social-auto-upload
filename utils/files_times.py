@@ -74,7 +74,7 @@ def generate_schedule_time_next_day(total_videos, videos_per_day, daily_times=No
         hour = daily_times[daily_video_index]
         time_offset = timedelta(days=day, hours=hour - current_time.hour, minutes=-current_time.minute,
                                 seconds=-current_time.second, microseconds=-current_time.microsecond)
-        timestamp = current_time + time_offset
+        timestamp = current_time# + time_offset
 
         schedule.append(timestamp)
 
